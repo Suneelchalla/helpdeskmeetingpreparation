@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meeting Minutes — Helpdesk Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f9ff;
+    --bg-card: #ffffff;
+    --bg-card-soft: #f1f6fd;
+    --bg-hover: #e7f0fb;
+    --border: #d9e3f0;
+    --border-strong: #a8bcd0;
+    --rule: #e1ebf6;
+    --text: #0a1828;
+    --text-muted: #3a5068;
+    --text-dim: #6b829c;
+    --text-on-dark: #ffffff;
+    --navy: #0a2647;
+    --ocean: #144272;
+    --sea: #205295;
+    --sky: #2c74b3;
+    --sky-light: #58a0d9;
+    --accent: #205295;
+    --accent-deep: #144272;
+    --accent-dim: rgba(32, 82, 149, 0.10);
+    --danger: #c0392b;
+    --success: #2d7a3e;
+    --warn: #b8860b;
+    --gradient-header: linear-gradient(135deg, #0a2647 0%, #144272 60%, #205295 100%);
+    --gradient-primary: linear-gradient(135deg, #205295 0%, #2c74b3 100%);
+    --gradient-card-accent: linear-gradient(90deg, #0a2647 0%, #205295 50%, #2c74b3 100%);
+    --shadow-sm: 0 1px 2px rgba(10, 38, 71, 0.06);
+    --shadow: 0 1px 3px rgba(10, 38, 71, 0.06), 0 4px 14px rgba(10, 38, 71, 0.07);
+    --shadow-md: 0 2px 6px rgba(10, 38, 71, 0.08), 0 12px 28px rgba(10, 38, 71, 0.10);
+    --shadow-lg: 0 4px 12px rgba(10, 38, 71, 0.12), 0 24px 48px rgba(10, 38, 71, 0.14);
+    --shadow-button: 0 2px 6px rgba(20, 66, 114, 0.20), 0 4px 12px rgba(20, 66, 114, 0.15);
+    --radius: 8px;
+    --radius-sm: 5px;
+    --radius-lg: 14px;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(circle at 14% 6%, rgba(20, 66, 114, 0.05) 0px, transparent 45%),
+      radial-gradient(circle at 88% 92%, rgba(44, 116, 179, 0.04) 0px, transparent 45%),
+      radial-gradient(rgba(20, 66, 114, 0.04) 1px, transparent 1px);
+    background-size: auto, auto, 26px 26px;
+    overflow: hidden;
+  }
+
+  /* ============== TOPBAR ============== */
+  .topbar {
+    background: var(--gradient-header);
+    color: var(--text-on-dark);
+    padding: 12px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(10, 38, 71, 0.18);
+    z-index: 10;
+  }
+  .topbar::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 8px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 12' preserveAspectRatio='none'><path d='M0,6 Q150,0 300,6 T600,6 T900,6 T1200,6 L1200,12 L0,12 Z' fill='%23f5f9ff'/></svg>");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .compass {
+    width: 30px; height: 30px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none'><circle cx='20' cy='20' r='17' stroke='%23ffffff' stroke-width='1.5' stroke-opacity='0.6'/><circle cx='20' cy='20' r='11' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.35'/><path d='M20 4 L22 11 L20 9 L18 11 Z' fill='%23ffffff'/><path d='M20 36 L22 29 L20 31 L18 29 Z' fill='%23ffffff' fill-opacity='0.55'/><path d='M4 20 L11 22 L9 20 L11 18 Z' fill='%23ffffff' fill-opacity='0.55'/><path d='M36 20 L29 22 L31 20 L29 18 Z' fill='%23ffffff' fill-opacity='0.55'/><circle cx='20' cy='20' r='2' fill='%23ffffff'/></svg>");
+    background-size: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+  }
+  .brand h1 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    font-variation-settings: "opsz" 30;
+    color: var(--text-on-dark);
+    line-height: 1.1;
+  }
+  .brand h1 em { color: #7cb9ea; font-style: italic; font-weight: 700; }
+  .brand .tag {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.65);
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    font-weight: 500;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  .topbar-back {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--text-on-dark);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all .15s;
+  }
+  .topbar-back:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  .topbar-back svg { width: 13px; height: 13px; stroke-width: 2.2; }
+
+  /* ============== APP LAYOUT ============== */
+  .app {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    height: calc(100vh - 56px);
+    position: relative;
+  }
+
+  /* ============== SIDEBAR ============== */
+  .sidebar {
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .toolbar {
+    padding: 12px 14px;
+    display: flex; gap: 6px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card-soft);
+  }
+  .search {
+    flex: 1;
+    position: relative;
+  }
+  .search input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 10px 7px 30px;
+    font: inherit;
+    font-size: 12.5px;
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s;
+  }
+  .search input:focus { border-color: var(--accent); }
+  .search svg {
+    position: absolute;
+    left: 9px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+  }
+  .icon-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .icon-toggle:hover {
+    border-color: var(--sky);
+    color: var(--ocean);
+  }
+  .icon-toggle.active {
+    background: var(--gradient-primary);
+    color: var(--text-on-dark);
+    border-color: transparent;
+    box-shadow: var(--shadow-button);
+  }
+  .icon-toggle svg { width: 14px; height: 14px; stroke-width: 2; }
+  .btn-primary-mini {
+    background: var(--gradient-primary);
+    color: var(--text-on-dark);
+    border: none;
+    cursor: pointer;
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-button);
+    transition: all .15s;
+  }
+  .btn-primary-mini:hover {
+    box-shadow: 0 4px 10px rgba(20, 66, 114, 0.28);
+    transform: translateY(-1px);
+  }
+  .btn-primary-mini svg { width: 14px; height: 14px; stroke-width: 2.5; }
+
+  .meeting-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 10px 16px;
+  }
+  .meeting-item {
+    padding: 12px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    margin-bottom: 4px;
+    transition: all .12s;
+  }
+  .meeting-item:hover {
+    background: var(--bg-card-soft);
+  }
+  .meeting-item.active {
+    background: var(--bg-card-soft);
+    border-color: var(--sky-light);
+    box-shadow: inset 3px 0 0 var(--sea);
+  }
+  .meeting-item .ticket {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--sea);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .meeting-item .title {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .meeting-item .meta {
+    font-size: 11.5px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .meeting-item .meta span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .empty-list {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-dim);
+    font-size: 12.5px;
+    font-style: italic;
+  }
+  .loading {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+  .sidebar-footer {
+    border-top: 1px solid var(--border);
+    padding: 10px 14px;
+    display: flex; gap: 6px;
+    background: var(--bg-card-soft);
+  }
+  .sidebar-footer .btn {
+    flex: 1;
+    font-size: 11.5px;
+    padding: 6px 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 500;
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    transition: all .15s;
+  }
+  .sidebar-footer .btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--sky);
+    color: var(--ocean);
+  }
+  .sidebar-footer .btn svg { width: 12px; height: 12px; stroke-width: 2; }
+
+  /* ============== MAIN ============== */
+  .main {
+    overflow-y: auto;
+    background: var(--bg);
+    position: relative;
+  }
+  .main-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 32px 48px 60px;
+  }
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 28px;
+    gap: 16px;
+  }
+  .main-header h1 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 38px;
+    line-height: 1.05;
+    letter-spacing: -0.8px;
+    color: var(--navy);
+    font-variation-settings: "opsz" 72;
+  }
+  .main-header h1 em {
+    font-style: italic;
+    color: var(--sea);
+    font-weight: 600;
+  }
+  .main-header .date {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .header-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* Buttons */
+  .btn {
+    cursor: pointer;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-card);
+    color: var(--text);
+    padding: 7px 13px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .15s;
+    box-shadow: var(--shadow-sm);
+  }
+  .btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--sky);
+    color: var(--ocean);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+  .btn.primary {
+    background: var(--gradient-primary);
+    color: var(--text-on-dark);
+    border-color: transparent;
+    box-shadow: var(--shadow-button);
+  }
+  .btn.primary:hover {
+    color: var(--text-on-dark);
+    box-shadow: 0 4px 10px rgba(20, 66, 114, 0.28);
+  }
+  .btn.ghost {
+    background: transparent;
+    border-color: var(--border);
+  }
+  .btn.danger {
+    color: var(--danger);
+    border-color: rgba(192, 57, 43, 0.3);
+  }
+  .btn.danger:hover {
+    background: rgba(192, 57, 43, 0.08);
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+  .btn svg { width: 14px; height: 14px; stroke-width: 2; }
+
+  /* ============== FORM ============== */
+  .field { margin-bottom: 20px; }
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+  .field-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+  .field label {
+    display: block;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 7px;
+  }
+  .field label .req { color: var(--danger); margin-left: 2px; }
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 6px 0 8px;
+    font: inherit;
+    background: transparent;
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s;
+    border-radius: 0;
+    font-size: 13.5px;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-bottom-color: var(--sea);
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.55;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--text-dim);
+    opacity: .7;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    color: var(--navy);
+    margin: 32px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    font-variation-settings: "opsz" 30;
+  }
+  .section-title em { color: var(--sea); font-style: italic; }
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--sea);
+    border-radius: 50%;
+  }
+
+  /* Action items rows */
+  .action-items { display: flex; flex-direction: column; gap: 10px; }
+  .action-row {
+    display: grid;
+    grid-template-columns: 24px 2fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: all .15s;
+  }
+  .action-row.done { opacity: 0.55; background: var(--bg-card-soft); }
+  .action-row.done input[data-ai-field="task"] {
+    text-decoration: line-through;
+    color: var(--text-dim);
+  }
+  .action-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--sea);
+    margin: 0;
+  }
+  .action-row input[type="text"],
+  .action-row input[type="date"] {
+    border: none;
+    background: transparent;
+    padding: 4px 6px;
+    font: inherit;
+    outline: none;
+    color: var(--text);
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  /* Subtle dividers between adjacent fields */
+  .action-row > input[type="text"] + input[type="text"],
+  .action-row > input[type="text"] + input[type="date"] {
+    border-left: 1px solid var(--rule);
+    padding-left: 10px;
+  }
+  .action-row input[type="text"]:focus,
+  .action-row input[type="date"]:focus { background: var(--bg-card-soft); }
+  .icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-dim);
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+  }
+  .icon-btn:hover { color: var(--danger); background: rgba(192, 57, 43, 0.08); }
+  .icon-btn svg { width: 14px; height: 14px; stroke-width: 2; }
+  .add-action {
+    align-self: flex-start;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  /* Participants */
+  .participants { display: flex; flex-direction: column; gap: 10px; }
+  .participant-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1.2fr 0.9fr 0.9fr auto;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .participant-row input,
+  .participant-row select {
+    border: none;
+    background: transparent;
+    padding: 4px 6px;
+    font: inherit;
+    outline: none;
+    color: var(--text);
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  /* Subtle dividers between adjacent fields so each input reads as its own column */
+  .participant-row > input + input,
+  .participant-row > input + select,
+  .participant-row > select + input,
+  .participant-row > select + select {
+    border-left: 1px solid var(--rule);
+    padding-left: 10px;
+  }
+  .participant-row input:focus,
+  .participant-row select:focus { background: var(--bg-card-soft); }
+  .participant-row select { cursor: pointer; }
+  .participant-row .side-internal { color: var(--ocean); font-weight: 600; }
+  .participant-row .side-client { color: var(--success); font-weight: 600; }
+  .participants-empty {
+    color: var(--text-dim);
+    font-size: 12.5px;
+    font-style: italic;
+    padding: 8px 0;
+  }
+  .participant-quick-add {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  /* ============== DASHBOARD ============== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    transition: all .15s;
+  }
+  .stat::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--gradient-primary);
+  }
+  .stat.danger::before { background: linear-gradient(180deg, #a72d2d, #c0392b); }
+  .stat.warn::before { background: linear-gradient(180deg, #b8860b, #d6a02a); }
+  .stat.ok::before { background: linear-gradient(180deg, #2d7a3e, #4a9c5d); }
+  .stat:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .stat .stat-num {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1;
+    color: var(--ocean);
+    font-weight: 700;
+    font-variation-settings: "opsz" 36;
+  }
+  .stat.danger .stat-num { color: var(--danger); }
+  .stat.warn .stat-num { color: var(--warn); }
+  .stat.ok .stat-num { color: var(--success); }
+  .stat .stat-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .pill-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pill-btn:hover {
+    border-color: var(--sky);
+    color: var(--ocean);
+  }
+  .pill-btn.active {
+    background: var(--gradient-primary);
+    color: var(--text-on-dark);
+    border-color: transparent;
+    box-shadow: var(--shadow-button);
+  }
+  .pill-btn .count {
+    background: var(--bg-card-soft);
+    color: var(--text-muted);
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+  .pill-btn.active .count {
+    background: rgba(255, 255, 255, 0.20);
+    color: var(--text-on-dark);
+  }
+
+  .dash-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .dash-row {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: 22px 1fr auto auto auto;
+    align-items: center;
+    gap: 14px;
+    transition: all .15s;
+    cursor: pointer;
+  }
+  .dash-row:hover {
+    border-color: var(--sky);
+    box-shadow: var(--shadow-sm);
+  }
+  .dash-row.done { opacity: 0.55; }
+  .dash-row.done .task { text-decoration: line-through; color: var(--text-dim); }
+  .dash-row input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--sea);
+    cursor: pointer;
+  }
+  .dash-row .task {
+    font-size: 13.5px;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .dash-row .task .source {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--sea);
+    background: var(--accent-dim);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+    align-self: flex-start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  .dash-row .assignee {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .dash-row .due {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    text-align: right;
+    white-space: nowrap;
+    padding: 3px 8px;
+    background: var(--bg-card-soft);
+    border-radius: 4px;
+  }
+  .dash-row .due.overdue {
+    color: var(--danger);
+    background: rgba(192, 57, 43, 0.08);
+    font-weight: 600;
+  }
+  .dash-row .due.soon {
+    color: var(--warn);
+    background: rgba(184, 134, 11, 0.08);
+    font-weight: 600;
+  }
+  .dash-row .open-link { color: var(--text-dim); }
+  .dash-row:hover .open-link { color: var(--sea); }
+  .dash-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* Empty state */
+  .empty-main {
+    text-align: center;
+    padding: 90px 20px;
+  }
+  .empty-main h2 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 32px;
+    color: var(--navy);
+    margin-bottom: 8px;
+    font-variation-settings: "opsz" 60;
+    font-weight: 500;
+  }
+  .empty-main p {
+    color: var(--text-muted);
+    margin-bottom: 22px;
+    font-size: 14px;
+  }
+
+  /* ============== TOAST ============== */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--navy);
+    color: var(--text-on-dark);
+    padding: 11px 20px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all .3s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+    z-index: 200;
+    box-shadow: var(--shadow-lg);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast.error { background: var(--danger); }
+  .toast.success { background: var(--success); }
+
+  /* ============== MODAL ============== */
+  .modal-bg {
+    position: fixed; inset: 0;
+    background: rgba(10, 24, 40, 0.50);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(3px);
+  }
+  .modal-bg.show { display: flex; }
+  .modal {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .modal::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gradient-card-accent);
+  }
+  .modal h3 {
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--navy);
+    letter-spacing: -0.3px;
+    font-variation-settings: "opsz" 30;
+  }
+  .modal p {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+  .modal .actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar {
+      position: fixed;
+      inset: 56px 0 0 0;
+      z-index: 20;
+      transform: translateX(-100%);
+      transition: transform .25s;
+    }
+    .sidebar.open { transform: translateX(0); }
+    .main-inner { padding: 22px 18px 50px; }
+    .main-header h1 { font-size: 28px; }
+    .field-grid, .field-grid-3 { grid-template-columns: 1fr; }
+    .action-row { grid-template-columns: 1fr; }
+    .participant-row { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .dash-row { grid-template-columns: auto 1fr; gap: 8px; }
+    .dash-row .assignee, .dash-row .due, .dash-row .open-link {
+      grid-column: 2; text-align: left;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="compass" aria-hidden="true"></span>
+    <h1>Meeting <em>Minutes</em></h1>
+    <span class="tag">Ticket Meeting Log · v2</span>
+  </div>
+  <a class="topbar-back" href="../" title="Back to Helpdesk Suite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to Suite
+  </a>
+</header>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="toolbar">
+      <div class="search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="searchInput" placeholder="Search ticket, client, title…" />
+      </div>
+      <button class="icon-toggle" id="dashBtn" title="Action items dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </button>
+      <button class="btn-primary-mini" id="newBtn" title="New meeting">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </div>
+    <div class="meeting-list" id="meetingList">
+      <div class="loading">Loading…</div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn" id="exportBtn" title="Download all data as JSON">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+      <button class="btn" id="importBtn" title="Import JSON backup">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Import
+      </button>
+      <input type="file" id="importFile" accept="application/json,.json" style="display:none;" />
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="main-inner" id="mainInner">
+      <!-- rendered by JS -->
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-bg" id="confirmModal">
+  <div class="modal">
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmMessage">This action cannot be undone.</p>
+    <div class="actions">
+      <button class="btn ghost" id="confirmCancel">Cancel</button>
+      <button class="btn danger" id="confirmOk">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+console.log('%cMeeting Minutes v2', 'color:#2c74b3;font-weight:bold;font-size:14px', '- role is free text for all sides');
+/* ============================================================
+   STATE
+============================================================ */
+let meetings = [];
+let currentId = null;
+let isDirty = false;
+let searchQuery = '';
+let currentView = 'meeting';   // 'meeting' | 'dashboard'
+let dashboardFilter = 'open';  // 'all' | 'open' | 'overdue' | 'week' | 'done'
+
+/* ============================================================
+   STORAGE (localStorage)
+============================================================ */
+const STORAGE_KEY = 'mm-state-v1';
+
+function loadAll() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      // Support both new format ({meetings, _savedAt}) and legacy direct array
+      if (Array.isArray(data)) {
+        meetings = data;
+      } else if (data && Array.isArray(data.meetings)) {
+        meetings = data.meetings;
+      } else {
+        meetings = [];
+      }
+      meetings.forEach(migrateMeeting);
+    }
+  } catch (e) {
+    console.warn('Failed to load:', e);
+    meetings = [];
+  }
+}
+
+function saveAll() {
+  try {
+    const data = { meetings, _savedAt: Date.now() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    return true;
+  } catch (e) {
+    showToast('Save failed: ' + e.message, true);
+    return false;
+  }
+}
+
+/* ============================================================
+   UTILS
+============================================================ */
+function uid() {
+  return 'm_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+function nowISO() {
+  const d = new Date();
+  const pad = n => n.toString().padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function fmtDateLong(iso) {
+  if (!iso) return '—';
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  } catch { return iso; }
+}
+function fmtDateShort(iso) {
+  if (!iso) return '—';
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  } catch { return iso; }
+}
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function emptyMeeting() {
+  return {
+    id: uid(),
+    ticketId: '',
+    title: '',
+    client: '',
+    meetingDate: nowISO(),
+    meetingType: 'Teams Call',
+    duration: '',
+    participants: [],
+    attendeesInternal: '',
+    attendeesClient: '',
+    agenda: '',
+    discussion: '',
+    actionItems: [],
+    nextSteps: '',
+    status: 'Open',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+}
+function migrateMeeting(m) {
+  if (!Array.isArray(m.participants)) m.participants = [];
+  if (m.participants.length === 0) {
+    const fromText = (text, side) =>
+      (text || '').split('\n').map(s => s.trim()).filter(Boolean).map(name => ({
+        name, role: '', side, status: 'Present'
+      }));
+    m.participants = [
+      ...fromText(m.attendeesInternal, 'Internal'),
+      ...fromText(m.attendeesClient, 'Client')
+    ];
+  }
+  if (!Array.isArray(m.actionItems)) m.actionItems = [];
+  m.actionItems.forEach(a => { if (typeof a.done !== 'boolean') a.done = false; });
+  return m;
+}
+
+/* ============================================================
+   TOAST + CONFIRM
+============================================================ */
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError ? ' error' : ' success');
+  setTimeout(() => { t.className = 'toast' + (isError ? ' error' : ''); }, 2400);
+}
+function confirmDialog(title, msg, okLabel, danger=true) {
+  return new Promise(resolve => {
+    const bg = document.getElementById('confirmModal');
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = msg;
+    const okBtn = document.getElementById('confirmOk');
+    okBtn.textContent = okLabel || 'Confirm';
+    okBtn.className = danger ? 'btn danger' : 'btn primary';
+    bg.classList.add('show');
+    const cleanup = (ans) => {
+      bg.classList.remove('show');
+      okBtn.onclick = null;
+      document.getElementById('confirmCancel').onclick = null;
+      resolve(ans);
+    };
+    okBtn.onclick = () => cleanup(true);
+    document.getElementById('confirmCancel').onclick = () => cleanup(false);
+  });
+}
+
+/* ============================================================
+   RENDER: SIDEBAR LIST
+============================================================ */
+function renderList() {
+  const wrap = document.getElementById('meetingList');
+  let list = meetings.slice().sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(m =>
+      (m.ticketId || '').toLowerCase().includes(q) ||
+      (m.title || '').toLowerCase().includes(q) ||
+      (m.client || '').toLowerCase().includes(q)
+    );
+  }
+  if (list.length === 0) {
+    wrap.innerHTML = `<div class="empty-list">${meetings.length === 0 ? 'No meetings logged yet.<br>Click + to add one.' : 'No matches.'}</div>`;
+    return;
+  }
+  const isDashboard = currentView === 'dashboard';
+  wrap.innerHTML = list.map(m => `
+    <div class="meeting-item ${!isDashboard && m.id === currentId ? 'active' : ''}" data-id="${m.id}">
+      <div class="ticket">${escapeHtml(m.ticketId || 'No ticket')}</div>
+      <div class="title">${escapeHtml(m.title || 'Untitled')}</div>
+      <div class="meta">
+        <span>${escapeHtml(m.client || '—')}</span>
+        <span>${fmtDateShort(m.meetingDate)}</span>
+      </div>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('.meeting-item').forEach(el => {
+    el.addEventListener('click', () => selectMeeting(el.dataset.id));
+  });
+}
+
+/* ============================================================
+   RENDER: MAIN AREA
+============================================================ */
+function renderMain() {
+  if (currentView === 'dashboard') {
+    renderDashboard();
+    return;
+  }
+  const m = meetings.find(x => x.id === currentId);
+  const wrap = document.getElementById('mainInner');
+  if (!m) {
+    wrap.innerHTML = `
+      <div class="empty-main">
+        <h2>No meeting selected</h2>
+        <p>Create a new entry or pick one from the left.</p>
+        <button class="btn primary" onclick="newMeeting()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          New meeting
+        </button>
+      </div>`;
+    return;
+  }
+
+  wrap.innerHTML = `
+    <div class="main-header">
+      <div>
+        <h1><em>Meeting</em> minutes</h1>
+        <div class="date">${fmtDateLong(m.meetingDate)}</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn" id="exportPdfBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </button>
+        <button class="btn primary" id="saveBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save
+        </button>
+        <button class="btn danger" id="deleteBtn" title="Delete">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="field-grid">
+      <div class="field">
+        <label>Ticket ID <span class="req">*</span></label>
+        <input type="text" data-field="ticketId" value="${escapeHtml(m.ticketId)}" placeholder="e.g. TKT-1042" />
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select data-field="status">
+          <option ${m.status==='Open'?'selected':''}>Open</option>
+          <option ${m.status==='Follow-up'?'selected':''}>Follow-up</option>
+          <option ${m.status==='Closed'?'selected':''}>Closed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Meeting title / Subject <span class="req">*</span></label>
+      <input type="text" data-field="title" value="${escapeHtml(m.title)}" placeholder="What was this meeting about?" />
+    </div>
+
+    <div class="field-grid">
+      <div class="field">
+        <label>Client</label>
+        <select data-field="client">
+          <option value="">— Select client —</option>
+          ${['MILAHA','ESLGEN','LSCSAIL','AL','ALXSVM','CNCOPH','CSD','FMSC','GWFC','HSL','KS','MOOV','NPDL','OEL','SSL','SBV','TSHG','TKC','TASLI','UAFL','UGL','WLSV'].map(c => `<option value="${c}" ${m.client===c?'selected':''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field">
+        <label>Date &amp; Time</label>
+        <input type="datetime-local" data-field="meetingDate" value="${escapeHtml(m.meetingDate)}" />
+      </div>
+    </div>
+
+    <div class="field-grid">
+      <div class="field">
+        <label>Meeting type</label>
+        <select data-field="meetingType">
+          <option ${m.meetingType==='Teams Call'?'selected':''}>Teams Call</option>
+          <option ${m.meetingType==='Phone Call'?'selected':''}>Phone Call</option>
+          <option ${m.meetingType==='In-person'?'selected':''}>In-person</option>
+          <option ${m.meetingType==='Other'?'selected':''}>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Duration</label>
+        <input type="text" data-field="duration" value="${escapeHtml(m.duration)}" placeholder="e.g. 45 min" />
+      </div>
+    </div>
+
+    <datalist id="participant-name-options">
+      ${['Suneel','Vignesh M','Akash','Vinoth B','Vinoth R','Vignesh R','Rene Claret','Vinothraj','Seenivasan','Kulasekar'].map(n => `<option value="${n}"></option>`).join('')}
+    </datalist>
+    <datalist id="role-suggestions">
+      ${['Manager','Sr. Support Engineer','Support Engineer','Intern','Project Manager','QA Engineer','Business Analyst','Tech Lead','Developer','Consultant'].map(r => `<option value="${r}"></option>`).join('')}
+    </datalist>
+
+    <div class="section-title"><em>Participants</em></div>
+    <div class="participants" id="participants"></div>
+    <div class="participant-quick-add">
+      <button class="btn ghost" id="addInternalBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>
+        Add internal
+      </button>
+      <button class="btn ghost" id="addClientBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>
+        Add client
+      </button>
+    </div>
+
+    <div class="section-title">Agenda &amp; <em>discussion</em></div>
+    <div class="field">
+      <label>Agenda</label>
+      <textarea data-field="agenda" placeholder="What was planned to be covered…">${escapeHtml(m.agenda)}</textarea>
+    </div>
+    <div class="field">
+      <label>Key discussion points</label>
+      <textarea data-field="discussion" placeholder="What was actually discussed…" style="min-height:130px;">${escapeHtml(m.discussion)}</textarea>
+    </div>
+
+    <div class="section-title">Action <em>items</em></div>
+    <div class="action-items" id="actionItems"></div>
+    <button class="btn ghost add-action" id="addActionBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>
+      Add action item
+    </button>
+
+    <div class="section-title">Next <em>steps</em></div>
+    <div class="field">
+      <label>Follow-up notes</label>
+      <textarea data-field="nextSteps" placeholder="Next meeting date, dependencies, etc.">${escapeHtml(m.nextSteps)}</textarea>
+    </div>
+  `;
+
+  // Bind input changes
+  wrap.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', () => {
+      m[el.dataset.field] = el.value;
+      isDirty = true;
+    });
+    el.addEventListener('change', () => {
+      m[el.dataset.field] = el.value;
+      isDirty = true;
+    });
+  });
+
+  renderActionItems(m);
+  renderParticipants(m);
+
+  document.getElementById('addActionBtn').addEventListener('click', () => {
+    m.actionItems.push({ task: '', assignee: '', dueDate: '', done: false });
+    isDirty = true;
+    renderActionItems(m);
+  });
+  document.getElementById('addInternalBtn').addEventListener('click', () => {
+    m.participants.push({ name: '', role: '', side: 'Internal', status: 'Present' });
+    isDirty = true;
+    renderParticipants(m);
+    setTimeout(() => {
+      const rows = document.querySelectorAll('.participant-row');
+      const last = rows[rows.length - 1];
+      if (last) last.querySelector('input').focus();
+    }, 30);
+  });
+  document.getElementById('addClientBtn').addEventListener('click', () => {
+    m.participants.push({ name: '', role: '', side: 'Client', status: 'Present' });
+    isDirty = true;
+    renderParticipants(m);
+    setTimeout(() => {
+      const rows = document.querySelectorAll('.participant-row');
+      const last = rows[rows.length - 1];
+      if (last) last.querySelector('input').focus();
+    }, 30);
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', saveMeeting);
+  document.getElementById('exportPdfBtn').addEventListener('click', () => exportPdf(m));
+  document.getElementById('deleteBtn').addEventListener('click', () => deleteMeeting(m.id));
+}
+
+function renderActionItems(m) {
+  const wrap = document.getElementById('actionItems');
+  if (!wrap) return;
+  if (!m.actionItems || m.actionItems.length === 0) {
+    wrap.innerHTML = '<div style="color:var(--text-dim);font-size:13px;font-style:italic;padding:8px 0;">No action items yet.</div>';
+    return;
+  }
+  wrap.innerHTML = m.actionItems.map((a, i) => `
+    <div class="action-row ${a.done ? 'done' : ''}" data-index="${i}">
+      <input type="checkbox" data-ai-field="done" ${a.done ? 'checked' : ''} title="Mark complete" />
+      <input type="text" data-ai-field="task" value="${escapeHtml(a.task)}" placeholder="Task description" />
+      <input type="text" data-ai-field="assignee" value="${escapeHtml(a.assignee)}" placeholder="Assignee" />
+      <input type="date" data-ai-field="dueDate" value="${escapeHtml(a.dueDate)}" />
+      <button class="icon-btn" data-remove="${i}" title="Remove">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('.action-row').forEach(row => {
+    const idx = parseInt(row.dataset.index);
+    row.querySelectorAll('[data-ai-field]').forEach(inp => {
+      const handler = () => {
+        if (inp.type === 'checkbox') {
+          m.actionItems[idx].done = inp.checked;
+          if (inp.checked) m.actionItems[idx].completedAt = new Date().toISOString();
+          row.classList.toggle('done', inp.checked);
+        } else {
+          m.actionItems[idx][inp.dataset.aiField] = inp.value;
+        }
+        isDirty = true;
+      };
+      inp.addEventListener('input', handler);
+      inp.addEventListener('change', handler);
+    });
+    row.querySelector('[data-remove]').addEventListener('click', () => {
+      m.actionItems.splice(idx, 1);
+      isDirty = true;
+      renderActionItems(m);
+    });
+  });
+}
+
+function renderParticipants(m) {
+  const wrap = document.getElementById('participants');
+  if (!wrap) return;
+  if (!m.participants || m.participants.length === 0) {
+    wrap.innerHTML = '<div class="participants-empty">No participants added yet. Click below to add.</div>';
+    return;
+  }
+  wrap.innerHTML = m.participants.map((p, i) => `
+    <div class="participant-row" data-index="${i}">
+      <input type="text" list="participant-name-options" data-p-field="name" value="${escapeHtml(p.name)}" placeholder="Full name" />
+      <input type="text" list="role-suggestions" data-p-field="role" value="${escapeHtml(p.role)}" placeholder="Type role / title" />
+      <select data-p-field="side" class="${p.side==='Internal'?'side-internal':p.side==='Client'?'side-client':''}">
+        <option ${p.side==='Internal'?'selected':''}>Internal</option>
+        <option ${p.side==='Client'?'selected':''}>Client</option>
+        <option ${p.side==='Other'?'selected':''}>Other</option>
+      </select>
+      <select data-p-field="status">
+        <option ${p.status==='Present'?'selected':''}>Present</option>
+        <option ${p.status==='Absent'?'selected':''}>Absent</option>
+        <option ${p.status==='Partial'?'selected':''}>Partial</option>
+        <option ${p.status==='To confirm'?'selected':''}>To confirm</option>
+      </select>
+      <button class="icon-btn" data-p-remove="${i}" title="Remove">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('.participant-row').forEach(row => {
+    const idx = parseInt(row.dataset.index);
+    row.querySelectorAll('[data-p-field]').forEach(inp => {
+      inp.addEventListener('input', () => {
+        m.participants[idx][inp.dataset.pField] = inp.value;
+        isDirty = true;
+      });
+      inp.addEventListener('change', () => {
+        m.participants[idx][inp.dataset.pField] = inp.value;
+        isDirty = true;
+        if (inp.dataset.pField === 'side') renderParticipants(m);
+      });
+    });
+    row.querySelector('[data-p-remove]').addEventListener('click', () => {
+      m.participants.splice(idx, 1);
+      isDirty = true;
+      renderParticipants(m);
+    });
+  });
+}
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+function classifyItem(item) {
+  if (item.done) return 'done';
+  if (!item.dueDate) return 'open-nodate';
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const due = new Date(item.dueDate); due.setHours(0, 0, 0, 0);
+  if (isNaN(due)) return 'open-nodate';
+  if (due < today) return 'overdue';
+  const diffDays = (due - today) / 86400000;
+  if (diffDays <= 7) return 'week';
+  return 'open-future';
+}
+function flatItems() {
+  const items = [];
+  meetings.forEach(m => {
+    (m.actionItems || []).forEach((a, idx) => {
+      items.push({ ...a, _meeting: m, _idx: idx, _cls: classifyItem(a) });
+    });
+  });
+  return items;
+}
+
+function renderDashboard() {
+  const wrap = document.getElementById('mainInner');
+  const all = flatItems();
+  const counts = {
+    all: all.length,
+    open: all.filter(i => !i.done).length,
+    overdue: all.filter(i => i._cls === 'overdue').length,
+    week: all.filter(i => i._cls === 'week').length,
+    done: all.filter(i => i.done).length
+  };
+  let filtered = all;
+  if (dashboardFilter === 'open') filtered = all.filter(i => !i.done);
+  else if (dashboardFilter === 'overdue') filtered = all.filter(i => i._cls === 'overdue');
+  else if (dashboardFilter === 'week') filtered = all.filter(i => i._cls === 'week');
+  else if (dashboardFilter === 'done') filtered = all.filter(i => i.done);
+
+  filtered.sort((a, b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    const ad = a.dueDate || '9999-12-31';
+    const bd = b.dueDate || '9999-12-31';
+    return ad.localeCompare(bd);
+  });
+
+  wrap.innerHTML = `
+    <div class="main-header">
+      <div>
+        <h1>Action <em>items</em></h1>
+        <div class="date">Across ${meetings.length} meeting${meetings.length === 1 ? '' : 's'}</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn" id="exitDashBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back to meetings
+        </button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-num">${counts.open}</div><div class="stat-label">Open</div></div>
+      <div class="stat danger"><div class="stat-num">${counts.overdue}</div><div class="stat-label">Overdue</div></div>
+      <div class="stat warn"><div class="stat-num">${counts.week}</div><div class="stat-label">Due this week</div></div>
+      <div class="stat ok"><div class="stat-num">${counts.done}</div><div class="stat-label">Completed</div></div>
+    </div>
+
+    <div class="filter-pills">
+      <button class="pill-btn ${dashboardFilter==='all'?'active':''}" data-f="all">All <span class="count">${counts.all}</span></button>
+      <button class="pill-btn ${dashboardFilter==='open'?'active':''}" data-f="open">Open <span class="count">${counts.open}</span></button>
+      <button class="pill-btn ${dashboardFilter==='overdue'?'active':''}" data-f="overdue">Overdue <span class="count">${counts.overdue}</span></button>
+      <button class="pill-btn ${dashboardFilter==='week'?'active':''}" data-f="week">Due this week <span class="count">${counts.week}</span></button>
+      <button class="pill-btn ${dashboardFilter==='done'?'active':''}" data-f="done">Done <span class="count">${counts.done}</span></button>
+    </div>
+
+    <div class="dash-items">
+      ${filtered.length === 0
+        ? `<div class="dash-empty">No action items in this view.</div>`
+        : filtered.map(i => {
+            const dueLabel = i.dueDate ? new Date(i.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'No date';
+            const dueClass = i._cls === 'overdue' ? 'overdue' : i._cls === 'week' ? 'soon' : '';
+            return `
+              <div class="dash-row ${i.done ? 'done' : ''}" data-mid="${i._meeting.id}" data-aidx="${i._idx}">
+                <input type="checkbox" ${i.done ? 'checked' : ''} data-toggle="1" />
+                <div class="task">
+                  ${escapeHtml(i.task || '(untitled task)')}
+                  <span class="source">${escapeHtml(i._meeting.ticketId || 'NO-TICKET')} · ${escapeHtml((i._meeting.title || 'Untitled').slice(0, 60))}</span>
+                </div>
+                <div class="assignee">${escapeHtml(i.assignee || '—')}</div>
+                <div class="due ${dueClass}">${dueLabel}</div>
+                <button class="icon-btn open-link" title="Open meeting">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+              </div>`;
+          }).join('')
+      }
+    </div>
+  `;
+
+  document.getElementById('exitDashBtn').addEventListener('click', () => {
+    currentView = 'meeting';
+    document.getElementById('dashBtn').classList.remove('active');
+    renderMain();
+    renderList();
+  });
+  wrap.querySelectorAll('.pill-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      dashboardFilter = b.dataset.f;
+      renderDashboard();
+    });
+  });
+  wrap.querySelectorAll('.dash-row').forEach(row => {
+    const mid = row.dataset.mid;
+    const aidx = parseInt(row.dataset.aidx);
+    const m = meetings.find(x => x.id === mid);
+    const cb = row.querySelector('input[type="checkbox"]');
+    cb.addEventListener('change', () => {
+      cb.dispatchEvent(new Event('toggle-bubble'));
+    });
+    cb.addEventListener('toggle-bubble', () => {
+      m.actionItems[aidx].done = cb.checked;
+      if (cb.checked) m.actionItems[aidx].completedAt = new Date().toISOString();
+      m.updatedAt = new Date().toISOString();
+      saveAll();
+      renderDashboard();
+    });
+    cb.addEventListener('click', e => e.stopPropagation());
+    row.addEventListener('click', (e) => {
+      if (e.target.closest('input[type="checkbox"]')) return;
+      currentView = 'meeting';
+      currentId = mid;
+      document.getElementById('dashBtn').classList.remove('active');
+      isDirty = false;
+      renderList();
+      renderMain();
+    });
+  });
+}
+
+/* ============================================================
+   ACTIONS
+============================================================ */
+function newMeeting() {
+  const m = emptyMeeting();
+  meetings.push(m);
+  currentId = m.id;
+  currentView = 'meeting';
+  document.getElementById('dashBtn').classList.remove('active');
+  isDirty = true;
+  renderList();
+  renderMain();
+  setTimeout(() => {
+    const i = document.querySelector('[data-field="ticketId"]');
+    if (i) i.focus();
+  }, 50);
+}
+
+function selectMeeting(id) {
+  if (isDirty && currentId && currentId !== id && currentView === 'meeting') {
+    if (!confirm('You have unsaved changes. Switch anyway?')) return;
+  }
+  currentId = id;
+  currentView = 'meeting';
+  document.getElementById('dashBtn').classList.remove('active');
+  isDirty = false;
+  renderList();
+  renderMain();
+}
+
+function saveMeeting() {
+  const m = meetings.find(x => x.id === currentId);
+  if (!m) return;
+  if (!m.ticketId.trim() || !m.title.trim()) {
+    showToast('Ticket ID and Title are required', true);
+    return;
+  }
+  m.updatedAt = new Date().toISOString();
+  if (saveAll()) {
+    isDirty = false;
+    showToast('Saved');
+    renderList();
+  }
+}
+
+async function deleteMeeting(id) {
+  const m = meetings.find(x => x.id === id);
+  if (!m) return;
+  const ok = await confirmDialog(
+    'Delete this meeting?',
+    `"${m.title || 'Untitled'}" will be permanently removed.`,
+    'Delete'
+  );
+  if (!ok) return;
+  meetings = meetings.filter(x => x.id !== id);
+  currentId = meetings.length ? meetings[0].id : null;
+  saveAll();
+  isDirty = false;
+  showToast('Deleted');
+  renderList();
+  renderMain();
+}
+
+/* ============================================================
+   PDF EXPORT
+============================================================ */
+function exportPdf(m) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 50;
+  let y = margin;
+
+  // Header band — nautical navy
+  doc.setFillColor(10, 38, 71);  // navy
+  doc.rect(0, 0, pageW, 90, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('times', 'italic');
+  doc.setFontSize(28);
+  doc.text('Meeting Minutes', margin, 50);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(180, 200, 220);
+  doc.text('HELPDESK SUITE · TICKET MEETING LOG', margin, 68);
+
+  // ticket id on right
+  doc.setFont('courier', 'bold');
+  doc.setFontSize(11);
+  doc.setTextColor(255, 255, 255);
+  const tk = (m.ticketId || 'NO-TICKET').toUpperCase();
+  doc.text(tk, pageW - margin, 50, { align: 'right' });
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(180, 200, 220);
+  doc.text(m.status || 'Open', pageW - margin, 68, { align: 'right' });
+
+  y = 120;
+  doc.setTextColor(10, 24, 40);
+
+  // Title
+  doc.setFont('times', 'normal');
+  doc.setFontSize(20);
+  const titleLines = doc.splitTextToSize(m.title || 'Untitled meeting', pageW - margin*2);
+  doc.text(titleLines, margin, y);
+  y += titleLines.length * 22 + 6;
+
+  // Date
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(107, 130, 156);
+  doc.text(fmtDateLong(m.meetingDate), margin, y);
+  y += 22;
+
+  // Rule
+  doc.setDrawColor(217, 227, 240);
+  doc.setLineWidth(0.5);
+  doc.line(margin, y, pageW - margin, y);
+  y += 16;
+
+  // Meta
+  const metaLeft = [
+    ['Client', m.client || '—'],
+    ['Type', m.meetingType || '—'],
+    ['Duration', m.duration || '—']
+  ];
+  doc.setFontSize(8);
+  doc.setTextColor(107, 130, 156);
+  metaLeft.forEach((row, i) => {
+    const ry = y + i * 18;
+    doc.setFont('helvetica', 'bold');
+    doc.text(row[0].toUpperCase(), margin, ry);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(10, 24, 40);
+    doc.setFontSize(10);
+    doc.text(String(row[1]).slice(0, 80), margin + 70, ry);
+    doc.setFontSize(8);
+    doc.setTextColor(107, 130, 156);
+  });
+  y += metaLeft.length * 18 + 12;
+
+  doc.line(margin, y, pageW - margin, y);
+  y += 20;
+
+  function ensureSpace(needed) {
+    if (y + needed > pageH - margin) {
+      doc.addPage();
+      y = margin;
+    }
+  }
+  function section(label) {
+    ensureSpace(40);
+    doc.setFont('times', 'italic');
+    doc.setFontSize(14);
+    doc.setTextColor(32, 82, 149);  // sea
+    doc.text(label, margin, y);
+    y += 6;
+    doc.setDrawColor(217, 227, 240);
+    doc.line(margin, y, margin + 40, y);
+    y += 14;
+    doc.setTextColor(10, 24, 40);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+  }
+  function paragraph(text) {
+    if (!text || !text.trim()) {
+      doc.setTextColor(170, 188, 208);
+      doc.setFont('helvetica', 'italic');
+      doc.text('—', margin, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(10, 24, 40);
+      y += 14;
+      return;
+    }
+    const lines = doc.splitTextToSize(text, pageW - margin*2);
+    lines.forEach(line => {
+      ensureSpace(14);
+      doc.text(line, margin, y);
+      y += 13;
+    });
+    y += 4;
+  }
+
+  // Participants
+  section('Participants');
+  if (m.participants && m.participants.length) {
+    const rows = m.participants.map(p => [
+      p.name || '—',
+      p.role || '—',
+      p.side || '—',
+      p.status || '—'
+    ]);
+    doc.autoTable({
+      startY: y,
+      head: [['Name', 'Role', 'Side', 'Status']],
+      body: rows,
+      theme: 'plain',
+      styles: { font: 'helvetica', fontSize: 10, cellPadding: 6, textColor: [10, 24, 40] },
+      headStyles: { fillColor: [241, 246, 253], textColor: [107, 130, 156], fontStyle: 'bold', fontSize: 8 },
+      alternateRowStyles: { fillColor: [248, 250, 254] },
+      margin: { left: margin, right: margin },
+      columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 130 }, 2: { cellWidth: 70 }, 3: { cellWidth: 70 } },
+      didParseCell: function (data) {
+        if (data.section === 'body' && data.column.index === 2) {
+          const v = data.cell.raw;
+          if (v === 'Internal') data.cell.styles.textColor = [20, 66, 114];
+          else if (v === 'Client') data.cell.styles.textColor = [45, 122, 62];
+        }
+      }
+    });
+    y = doc.lastAutoTable.finalY + 16;
+  } else {
+    paragraph('');
+  }
+
+  section('Agenda');
+  paragraph(m.agenda);
+
+  section('Key Discussion Points');
+  paragraph(m.discussion);
+
+  if (m.actionItems && m.actionItems.length) {
+    section('Action Items');
+    const rows = m.actionItems.map(a => [
+      a.done ? '[x]' : '[ ]',
+      a.task || '—',
+      a.assignee || '—',
+      a.dueDate || '—'
+    ]);
+    doc.autoTable({
+      startY: y,
+      head: [['', 'Task', 'Assignee', 'Due']],
+      body: rows,
+      theme: 'plain',
+      styles: { font: 'helvetica', fontSize: 10, cellPadding: 6, textColor: [10, 24, 40] },
+      headStyles: { fillColor: [241, 246, 253], textColor: [107, 130, 156], fontStyle: 'bold', fontSize: 8 },
+      alternateRowStyles: { fillColor: [248, 250, 254] },
+      margin: { left: margin, right: margin },
+      columnStyles: { 0: { cellWidth: 24, halign: 'center' }, 1: { cellWidth: 'auto' }, 2: { cellWidth: 100 }, 3: { cellWidth: 80 } }
+    });
+    y = doc.lastAutoTable.finalY + 16;
+  } else {
+    section('Action Items');
+    paragraph('');
+  }
+
+  section('Next Steps');
+  paragraph(m.nextSteps);
+
+  // Footer on every page
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(150, 165, 185);
+    doc.text(`${tk} · ${fmtDateShort(m.meetingDate)}`, margin, pageH - 24);
+    doc.text(`Page ${p} of ${totalPages}`, pageW - margin, pageH - 24, { align: 'right' });
+    doc.setDrawColor(217, 227, 240);
+    doc.line(margin, pageH - 36, pageW - margin, pageH - 36);
+  }
+
+  const safe = (s) => (s || 'meeting').toString().replace(/[^a-z0-9-_]+/gi, '_').slice(0, 40);
+  doc.save(`${safe(m.ticketId)}_${safe(m.title)}.pdf`);
+  showToast('PDF exported');
+}
+
+/* ============================================================
+   EXPORT / IMPORT (JSON)
+============================================================ */
+function exportJson() {
+  if (meetings.length === 0) {
+    showToast('Nothing to export yet', true);
+    return;
+  }
+  const data = {
+    app: 'meeting-minutes',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    meetings: meetings
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `meeting-minutes-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast(`Exported ${meetings.length} meeting${meetings.length === 1 ? '' : 's'}`);
+}
+
+async function handleImportFile(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    let imported;
+    if (Array.isArray(data)) imported = data;
+    else if (data && Array.isArray(data.meetings)) imported = data.meetings;
+    else throw new Error('Unrecognized format');
+
+    const ok = await confirmDialog(
+      'Import backup?',
+      `${imported.length} meeting${imported.length === 1 ? '' : 's'} found. Existing meetings with the same ID will be updated; new ones will be added. Nothing is deleted.`,
+      'Import',
+      false
+    );
+    if (!ok) { e.target.value = ''; return; }
+
+    const byId = new Map(meetings.map(m => [m.id, m]));
+    let added = 0, updated = 0;
+    imported.forEach(rec => {
+      if (!rec || typeof rec !== 'object') return;
+      if (!rec.id) rec.id = uid();
+      migrateMeeting(rec);
+      if (byId.has(rec.id)) {
+        Object.assign(byId.get(rec.id), rec);
+        updated++;
+      } else {
+        meetings.push(rec);
+        byId.set(rec.id, rec);
+        added++;
+      }
+    });
+    saveAll();
+    renderList();
+    renderMain();
+    showToast(`Imported · ${added} new, ${updated} updated`);
+  } catch (err) {
+    showToast('Import failed: ' + err.message, true);
+  }
+  e.target.value = '';
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+document.getElementById('newBtn').addEventListener('click', newMeeting);
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  renderList();
+});
+document.getElementById('dashBtn').addEventListener('click', () => {
+  if (currentView === 'dashboard') {
+    currentView = 'meeting';
+    document.getElementById('dashBtn').classList.remove('active');
+  } else {
+    if (isDirty && !confirm('You have unsaved changes. Switch to dashboard anyway?')) return;
+    currentView = 'dashboard';
+    document.getElementById('dashBtn').classList.add('active');
+    isDirty = false;
+  }
+  renderMain();
+  renderList();
+});
+document.getElementById('exportBtn').addEventListener('click', exportJson);
+document.getElementById('importBtn').addEventListener('click', () => {
+  document.getElementById('importFile').click();
+});
+document.getElementById('importFile').addEventListener('change', handleImportFile);
+
+window.addEventListener('beforeunload', (e) => {
+  if (isDirty) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    if (currentId && currentView === 'meeting') saveMeeting();
+  }
+});
+
+(function init() {
+  loadAll();
+  if (meetings.length > 0) {
+    currentId = meetings.sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''))[0].id;
+  }
+  renderList();
+  renderMain();
+})();
+</script>
+</body>
+</html>
