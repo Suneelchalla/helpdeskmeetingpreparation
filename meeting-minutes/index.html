@@ -131,6 +131,177 @@
   }
   .topbar-back svg { width: 13px; height: 13px; stroke-width: 2.2; }
 
+  /* ============== TOPBAR ACTIONS (right cluster) ============== */
+  .topbar-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topbar-btn {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--text-on-dark);
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all .15s;
+  }
+  .topbar-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  .topbar-btn.active {
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--navy);
+    border-color: rgba(255, 255, 255, 0.85);
+  }
+  .topbar-btn svg { width: 13px; height: 13px; stroke-width: 2.2; }
+
+  /* ============== NOTES SIDE PANEL ============== */
+  .notes-panel {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 400px;
+    max-width: 95vw;
+    background: var(--bg-card);
+    border-left: 1px solid var(--border);
+    box-shadow: -10px 0 32px rgba(10, 38, 71, 0.18);
+    transform: translateX(100%);
+    transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+  }
+  .notes-panel.open { transform: translateX(0); }
+  .notes-panel-header {
+    background: var(--gradient-header);
+    color: var(--text-on-dark);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .notes-panel-header h2 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    font-variation-settings: "opsz" 30;
+    letter-spacing: -0.2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .notes-panel-header h2 em {
+    font-style: italic;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+  .notes-panel-header h2 svg {
+    width: 18px; height: 18px;
+    stroke-width: 2;
+    opacity: 0.85;
+  }
+  .notes-panel-close {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--text-on-dark);
+    cursor: pointer;
+    width: 30px; height: 30px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+  }
+  .notes-panel-close:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+  .notes-panel-close svg { width: 14px; height: 14px; stroke-width: 2.4; }
+  .notes-panel-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 14px 16px 0;
+    min-height: 0;
+  }
+  .notes-textarea {
+    flex: 1;
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-card-soft);
+    padding: 14px 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+    resize: none;
+    outline: none;
+    transition: border-color .15s, background .15s;
+  }
+  .notes-textarea:focus {
+    border-color: var(--sky);
+    background: var(--bg-card);
+    box-shadow: 0 0 0 3px rgba(44, 116, 179, 0.12);
+  }
+  .notes-panel-footer {
+    padding: 10px 16px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    border-top: 1px solid var(--rule);
+    margin-top: 10px;
+    font-size: 11.5px;
+    color: var(--text-dim);
+  }
+  .notes-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .notes-status .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--success);
+    display: inline-block;
+  }
+  .notes-status.saving .dot { background: var(--warn); }
+  .notes-actions {
+    display: inline-flex;
+    gap: 6px;
+  }
+  .notes-mini-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 11.5px;
+    font-family: inherit;
+    transition: all .15s;
+  }
+  .notes-mini-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .notes-mini-btn.danger:hover {
+    background: rgba(192, 57, 43, 0.08);
+    color: var(--danger);
+    border-color: var(--danger);
+  }
+
+  @media (max-width: 768px) {
+    .notes-panel { width: 100%; max-width: 100%; }
+  }
+
   /* ============== APP LAYOUT ============== */
   .app {
     display: grid;
@@ -904,10 +1075,16 @@
     <h1>Meeting <em>Minutes</em></h1>
     <span class="tag">Ticket Meeting Log · v2</span>
   </div>
-  <a class="topbar-back" href="../" title="Back to Helpdesk Suite">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Back to Suite
-  </a>
+  <div class="topbar-actions">
+    <button class="topbar-btn" id="notesBtn" title="Quick notes scratchpad (Alt+N)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+      Notes
+    </button>
+    <a class="topbar-back" href="../" title="Back to Helpdesk Suite">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to Suite
+    </a>
+  </div>
 </header>
 
 <div class="app">
@@ -946,6 +1123,34 @@
     </div>
   </main>
 </div>
+
+<aside class="notes-panel" id="notesPanel" aria-hidden="true">
+  <div class="notes-panel-header">
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+      Quick <em>Notes</em>
+    </h2>
+    <button class="notes-panel-close" id="notesCloseBtn" title="Close (Esc)" aria-label="Close notes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="notes-panel-body">
+    <textarea
+      id="notesTextarea"
+      class="notes-textarea"
+      placeholder="Jot anything here — phone numbers, snippets, todos, server names, command lines… auto-saves as you type."
+      spellcheck="false"
+    ></textarea>
+    <div class="notes-panel-footer">
+      <span class="notes-status" id="notesStatus"><span class="dot"></span><span id="notesStatusText">Saved</span></span>
+      <div class="notes-actions">
+        <span id="notesCount" style="margin-right:4px;">0 chars</span>
+        <button class="notes-mini-btn" id="notesCopyBtn" title="Copy all notes">Copy</button>
+        <button class="notes-mini-btn danger" id="notesClearBtn" title="Clear all notes">Clear</button>
+      </div>
+    </div>
+  </div>
+</aside>
 
 <div class="toast" id="toast"></div>
 
@@ -1929,7 +2134,116 @@ document.addEventListener('keydown', (e) => {
     e.preventDefault();
     if (currentId && currentView === 'meeting') saveMeeting();
   }
+  if (e.altKey && (e.key === 'n' || e.key === 'N')) {
+    e.preventDefault();
+    toggleNotesPanel();
+  }
+  if (e.key === 'Escape') {
+    const np = document.getElementById('notesPanel');
+    if (np && np.classList.contains('open')) {
+      closeNotesPanel();
+    }
+  }
 });
+
+/* ============================================================
+   QUICK NOTES PANEL (independent scratchpad)
+============================================================ */
+const NOTES_KEY = 'mm-quicknotes-v1';
+let notesSaveTimer = null;
+
+function loadNotes() {
+  try {
+    const raw = localStorage.getItem(NOTES_KEY);
+    return raw || '';
+  } catch { return ''; }
+}
+function saveNotesNow(text) {
+  try {
+    localStorage.setItem(NOTES_KEY, text);
+    const s = document.getElementById('notesStatus');
+    const t = document.getElementById('notesStatusText');
+    if (s && t) { s.classList.remove('saving'); t.textContent = 'Saved'; }
+  } catch (err) {
+    const t = document.getElementById('notesStatusText');
+    if (t) t.textContent = 'Save failed';
+  }
+}
+function updateNotesCount(text) {
+  const c = document.getElementById('notesCount');
+  if (!c) return;
+  const chars = text.length;
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  c.textContent = `${words} word${words === 1 ? '' : 's'} · ${chars} char${chars === 1 ? '' : 's'}`;
+}
+function openNotesPanel() {
+  const p = document.getElementById('notesPanel');
+  const b = document.getElementById('notesBtn');
+  p.classList.add('open');
+  p.setAttribute('aria-hidden', 'false');
+  b.classList.add('active');
+  setTimeout(() => document.getElementById('notesTextarea').focus(), 300);
+}
+function closeNotesPanel() {
+  const p = document.getElementById('notesPanel');
+  const b = document.getElementById('notesBtn');
+  p.classList.remove('open');
+  p.setAttribute('aria-hidden', 'true');
+  b.classList.remove('active');
+}
+function toggleNotesPanel() {
+  const p = document.getElementById('notesPanel');
+  if (p.classList.contains('open')) closeNotesPanel();
+  else openNotesPanel();
+}
+
+(function wireNotes() {
+  const ta = document.getElementById('notesTextarea');
+  const initial = loadNotes();
+  ta.value = initial;
+  updateNotesCount(initial);
+
+  ta.addEventListener('input', () => {
+    const s = document.getElementById('notesStatus');
+    const t = document.getElementById('notesStatusText');
+    s.classList.add('saving');
+    t.textContent = 'Saving…';
+    updateNotesCount(ta.value);
+    clearTimeout(notesSaveTimer);
+    notesSaveTimer = setTimeout(() => saveNotesNow(ta.value), 350);
+  });
+
+  document.getElementById('notesBtn').addEventListener('click', toggleNotesPanel);
+  document.getElementById('notesCloseBtn').addEventListener('click', closeNotesPanel);
+
+  document.getElementById('notesCopyBtn').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      showToast('Notes copied to clipboard');
+    } catch {
+      ta.select();
+      document.execCommand('copy');
+      ta.setSelectionRange(ta.value.length, ta.value.length);
+      showToast('Notes copied');
+    }
+  });
+
+  document.getElementById('notesClearBtn').addEventListener('click', async () => {
+    if (!ta.value.trim()) { showToast('Notes are already empty', true); return; }
+    const ok = await confirmDialog(
+      'Clear all notes?',
+      'This will permanently delete the contents of your quick-notes scratchpad. Meeting data is not affected.',
+      'Clear notes',
+      true
+    );
+    if (!ok) return;
+    ta.value = '';
+    saveNotesNow('');
+    updateNotesCount('');
+    showToast('Notes cleared');
+    ta.focus();
+  });
+})();
 
 (function init() {
   loadAll();
